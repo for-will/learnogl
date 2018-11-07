@@ -20,3 +20,5 @@ target_link_libraries(hellowindow ${EXTRA_LIBS})
 
 add_executable(hellotriangle src/hellotriangle/hellotriangle.cpp)
 target_link_libraries(hellotriangle ${EXTRA_LIBS})
+
+include_directories(/usr/local/include)
