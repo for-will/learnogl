@@ -9,42 +9,43 @@
 #include <string>
 #include <utils/utils.h>
 #include <cmath>
-
-std::string vertex_src = read_file("src/shader/vertex.glsl");
-std::string fragment_src = read_file("src/shader/fragment.glsl");
-
-GLuint createShader(GLenum type, const GLchar* source){
-//    std::cout << source;
-    GLuint shader = glCreateShader(type);
-    glShaderSource(shader, 1, &source, nullptr);
-    glCompileShader(shader);
-    GLint success;
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-    if (!success){
-        GLchar buffer[512];
-        glGetShaderInfoLog(shader, sizeof(buffer), nullptr, buffer);
-        printf("shader info log:%s\n", buffer);
-        return 0;
-    }
-
-    return shader;
-}
-
-GLuint createProgram(GLuint vertex_shader, GLuint fragment_shader){
-    GLuint program = glCreateProgram();
-    glAttachShader(program, vertex_shader);
-    glAttachShader(program, fragment_shader);
-    glLinkProgram(program);
-    GLint success;
-    glGetProgramiv(program, GL_LINK_STATUS, &success);
-    if (!success){
-        GLchar buffer[512];
-        glGetProgramInfoLog(program, sizeof(buffer), nullptr, buffer);
-        printf("program info log:%s\n", buffer);
-        return 0;
-    }
-    return program;
-}
+#include "utils/shader.h"
+//
+//std::string vertex_src = read_file("src/shader/vertex.glsl");
+//std::string fragment_src = read_file("src/shader/fragment.glsl");
+//
+//GLuint createShader(GLenum type, const GLchar* source){
+////    std::cout << source;
+//    GLuint shader = glCreateShader(type);
+//    glShaderSource(shader, 1, &source, nullptr);
+//    glCompileShader(shader);
+//    GLint success;
+//    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+//    if (!success){
+//        GLchar buffer[512];
+//        glGetShaderInfoLog(shader, sizeof(buffer), nullptr, buffer);
+//        printf("shader info log:%s\n", buffer);
+//        return 0;
+//    }
+//
+//    return shader;
+//}
+//
+//GLuint createProgram(GLuint vertex_shader, GLuint fragment_shader){
+//    GLuint program = glCreateProgram();
+//    glAttachShader(program, vertex_shader);
+//    glAttachShader(program, fragment_shader);
+//    glLinkProgram(program);
+//    GLint success;
+//    glGetProgramiv(program, GL_LINK_STATUS, &success);
+//    if (!success){
+//        GLchar buffer[512];
+//        glGetProgramInfoLog(program, sizeof(buffer), nullptr, buffer);
+//        printf("program info log:%s\n", buffer);
+//        return 0;
+//    }
+//    return program;
+//}
 
 //*  @param[in] window The window that received the event.
 //*  @param[in] key The [keyboard key](@ref keys) that was pressed or released.
@@ -66,6 +67,7 @@ int main(){
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
     GLFWwindow *window = glfwCreateWindow(400, 400, "hello-shader", nullptr, nullptr);
     if (window == nullptr){
@@ -90,11 +92,11 @@ int main(){
     glViewport(0, 0, width, height);
 
 
-    GLuint vs = createShader(GL_VERTEX_SHADER, vertex_src.c_str());
-    GLuint fs = createShader(GL_FRAGMENT_SHADER, fragment_src.c_str());
-    GLuint program = createProgram(vs, fs);
-    glDeleteShader(vs);
-    glDeleteShader(fs);
+//    GLuint vs = createShader(GL_VERTEX_SHADER, vertex_src.c_str());
+//    GLuint fs = createShader(GL_FRAGMENT_SHADER, fragment_src.c_str());
+//    GLuint program = createProgram(vs, fs);
+//    glDeleteShader(vs);
+//    glDeleteShader(fs);
 
     GLfloat vertexes[] = {
             //位置             //颜色
@@ -123,7 +125,9 @@ int main(){
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VEO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-    glUseProgram(program);
+    Shader shader("src/shader/vertex.glsl", "src/shader/fragment.glsl");
+//    glUseProgram(program);
+    shader.Use();
 
     glBindVertexArray(0);
 
@@ -139,7 +143,7 @@ int main(){
 
         GLdouble timeVal = glfwGetTime();
         GLfloat redVal = sin(timeVal)/2 + 0.5;
-        GLint location = glGetUniformLocation(program, "ourColor");
+        GLint location = glGetUniformLocation(shader.Program, "ourColor");
         glUniform4f(location, redVal, 0, 0, 1.0);
 
         glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
