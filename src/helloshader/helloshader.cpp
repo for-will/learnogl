@@ -46,6 +46,19 @@ GLuint createProgram(GLuint vertex_shader, GLuint fragment_shader){
     return program;
 }
 
+//*  @param[in] window The window that received the event.
+//*  @param[in] key The [keyboard key](@ref keys) that was pressed or released.
+//*  @param[in] scancode The system-specific scancode of the key.
+//*  @param[in] action `GLFW_PRESS`, `GLFW_RELEASE` or `GLFW_REPEAT`.
+//*  @param[in] mods Bit field describing which [modifier keys](@ref mods) were
+//        *  held down.
+
+void key_callback(GLFWwindow* window, GLint key, GLint scancode, GLint action, GLint mods){
+    if (key == GLFW_KEY_ESCAPE && action==GLFW_PRESS){
+        glfwSetWindowShouldClose(window, GLFW_TRUE);
+    }
+}
+
 int main(){
 
     glfwInit();
@@ -63,6 +76,7 @@ int main(){
         return -1;
     }
     glfwMakeContextCurrent(window);
+    glfwSetKeyCallback(window, key_callback);
 
     glewExperimental = GLFW_TRUE;
     glewInit();
@@ -79,17 +93,17 @@ int main(){
     GLuint vs = createShader(GL_VERTEX_SHADER, vertex_src.c_str());
     GLuint fs = createShader(GL_FRAGMENT_SHADER, fragment_src.c_str());
     GLuint program = createProgram(vs, fs);
+    glDeleteShader(vs);
+    glDeleteShader(fs);
 
     GLfloat vertexes[] = {
             //位置             //颜色
             0,    0.5,  0,    1.0, 0, 0,
-            0.5,  -0.5, 0,    0, 1.0, 0,
-            -0.5, -0.5, 0,    0, 0, 1.0,
+            0.5,  -0.5f, 0,    0, 1.0, 0,
+            -0.5f, -0.5f, 0,    0, 0, 1.0,
     };
 
     GLuint indices[] = {0, 1, 2};
-
-
 
 
     GLuint VAO, VBO, VEO;
@@ -118,7 +132,6 @@ int main(){
     while (!glfwWindowShouldClose(window)){
         glfwPollEvents();
 
-//        glViewport(0, 0, 200, 200);
         glClearColor(0.2, 0.3, 0.3, 1.0);
         glClear(GL_COLOR_BUFFER_BIT);
 
@@ -136,6 +149,6 @@ int main(){
         glfwSwapBuffers(window);
     }
 
-
+    glfwTerminate();
     return 0;
 }
