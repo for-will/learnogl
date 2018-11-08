@@ -3,6 +3,7 @@ project(hellowindow)
 
 set(CMAKE_CXX_STANDARD 14)
 
+include_directories(/usr/local/include src/)
 
 if (APPLE)
     include_directories(/System/Library/Frameworks)
@@ -14,11 +15,13 @@ if (APPLE)
     set(EXTRA_LIBS ${COCOA_LIBRARY} ${OpenGL_LIBRARY} ${IOKit_LIBRARY} ${CoreVideo_LIBRARY})
     set(EXTRA_LIBS ${EXTRA_LIBS} /usr/local/lib/libGLEW.a /usr/local/lib/libglfw3.a)
 endif ()
-#add_executable(test main.cpp)
+add_executable(test main.cpp)
+
 add_executable(hellowindow src/hellowindow/hellowindow.cpp)
 target_link_libraries(hellowindow ${EXTRA_LIBS})
 
 add_executable(hellotriangle src/hellotriangle/hellotriangle.cpp)
 target_link_libraries(hellotriangle ${EXTRA_LIBS})
 
-include_directories(/usr/local/include)
+add_executable(helloshader src/helloshader/helloshader.cpp)
+target_link_libraries(helloshader ${EXTRA_LIBS})
