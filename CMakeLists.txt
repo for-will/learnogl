@@ -25,3 +25,6 @@ target_link_libraries(hellotriangle ${EXTRA_LIBS})
 
 add_executable(helloshader src/helloshader/helloshader.cpp)
 target_link_libraries(helloshader ${EXTRA_LIBS})
+
+add_executable(test-texture src/test_texture/test_texture.cpp)
+target_link_libraries(test-texture ${EXTRA_LIBS} /usr/local/lib/libSOIL.a)
