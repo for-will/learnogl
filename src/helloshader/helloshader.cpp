@@ -125,7 +125,7 @@ int main(){
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VEO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-    Shader shader("src/shader/vertex.glsl", "src/shader/fragment.glsl");
+    Shader shader("src/shader/vertex.glsl", "src/shader/hell_shader_fragment.glsl");
 //    glUseProgram(program);
     shader.Use();
 
@@ -142,7 +142,7 @@ int main(){
         glBindVertexArray(VAO);
 
         GLdouble timeVal = glfwGetTime();
-        GLfloat redVal = sin(timeVal)/2 + 0.5;
+        GLfloat redVal = sin(timeVal)/4.0f + 0.25f;
         GLint location = glGetUniformLocation(shader.Program, "ourColor");
         glUniform4f(location, redVal, 0, 0, 1.0);
 
