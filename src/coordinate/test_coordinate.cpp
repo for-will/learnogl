@@ -12,6 +12,8 @@
 #include <iostream>
 #include <string.h>
 #include <SOIL.h>
+#include <vector>
+#include <zconf.h>
 
 #include "utils/shader.h"
 
@@ -49,18 +51,66 @@ int main(void){
     glViewport(0, 0, screenWidth, screenHeight);
 
     GLfloat vertexes[] = {
-             0.5f,  0.5f, 0, 1, 1,
-            -0.5f,  0.5f, 0,  0, 1,
+//             0.5f,  0.5f, 0.5, 1, 1,
+//            -0.5f,  0.5f, 0.5,  0, 1,
+//            -0.5f, -0.5f, 0.5,  0, 0,
+//             0.5f, -0.5f, 0.5,  1, 0,
+//
+//             0.5f,  0.5f,  -0.5,  1, 1,
+//             -0.5f,  0.5f, -0.5,  0, 1,
+//             -0.5f, -0.5f, -0.5,  0, 0,
+//             0.5f, -0.5f,  -0.5,  1, 0,
+            -0.5,   0.5,   0.5,     1.0,   1.0,
+            -0.5,  -0.5,   0.5,     0.0,   1.0,
+            -0.5,  -0.5,  -0.5,     0.0,   0.0,
+            -0.5,   0.5,  -0.5,     1.0,   0.0,
 
-            -0.5f, -0.5f, 0,  0, 0,
-             0.5f, -0.5f, 0,  1, 0,
+            0.5,   0.5,   0.5,     1.0,   1.0,
+            0.5,  -0.5,   0.5,     0.0,   1.0,
+            0.5,  -0.5,  -0.5,     0.0,   0.0,
+            0.5,   0.5,  -0.5,     1.0,   0.0,
 
-             0.5f,  0.5f,  -1,  1, 1,
-             -0.5f,  0.5f, -1,  0, 1,
 
-             -0.5f, -0.5f, -1,  0, 0,
-             0.5f, -0.5f,  -1,  1, 0,
+            0.5,  -0.5,   0.5,     1.0,   1.0,
+            -0.5,  -0.5,   0.5,     0.0,   1.0,
+            -0.5,  -0.5,  -0.5,     0.0,   0.0,
+            0.5,  -0.5,  -0.5,     1.0,   0.0,
+
+            0.5,   0.5,   0.5,     1.0,   1.0,
+            -0.5,   0.5,   0.5,     0.0,   1.0,
+            -0.5,   0.5,  -0.5,     0.0,   0.0,
+            0.5,   0.5,  -0.5,     1.0,   0.0,
+
+
+            0.5,   0.5,  -0.5,     1.0,   1.0,
+            -0.5,   0.5,  -0.5,     0.0,   1.0,
+            -0.5,  -0.5,  -0.5,     0.0,   0.0,
+            0.5,  -0.5,  -0.5,     1.0,   0.0,
+
+            0.5,   0.5,   0.5,     1.0,   1.0,
+            -0.5,   0.5,   0.5,     0.0,   1.0,
+            -0.5,  -0.5,   0.5,     0.0,   0.0,
+            0.5,  -0.5,   0.5,     1.0,   0.0,
+
     };
+
+    float vals[] = {
+            1, 1,
+            0, 1,
+            0, 0,
+            1, 0
+            };
+    for(int i =0; i < 3; i++){
+        for(int k=0; k < 2; k++) {
+            for(int j = 0; j < 4; j++){
+                std::vector<float> l = {vals[j * 2], vals[j * 2 + 1]};
+                l.insert(l.begin() + i, k);
+                printf("%5.1f, %5.1f, %5.1f,   %5.1f, %5.1f,\n", l[0]-0.5, l[1]-0.5, l[2]-0.5, vals[j * 2], vals[j * 2 + 1]);
+            }
+            printf("\n");
+        }
+        printf("\n");
+    }
 
     GLuint indices[] = {
             //前
@@ -82,6 +132,15 @@ int main(void){
             6, 7, 2,
             6, 2, 3,
     };
+
+    for(int i = 0; i < 6; i++){
+        indices[i*6+0] = i*4+0;
+        indices[i*6+1] = i*4+1;
+        indices[i*6+2] = i*4+2;
+        indices[i*6+3] = i*4+0;
+        indices[i*6+4] = i*4+2;
+        indices[i*6+5] = i*4+3;
+    }
 
     GLuint VBO, VEO, VAO;
     glGenBuffers(1, &VBO);
@@ -133,11 +192,25 @@ int main(void){
     SOIL_free_image_data(image2);
 
 
+    glm::vec3 cubePositions[] = {
+            glm::vec3( 0.0f,  0.0f,  0.0f),
+            glm::vec3( 2.0f,  5.0f, -15.0f),
+            glm::vec3(-1.5f, -2.2f, -2.5f),
+            glm::vec3(-3.8f, -2.0f, -12.3f),
+            glm::vec3( 2.4f, -0.4f, -3.5f),
+            glm::vec3(-1.7f,  3.0f, -7.5f),
+            glm::vec3( 1.3f, -2.0f, -2.5f),
+            glm::vec3( 1.5f,  2.0f, -2.5f),
+            glm::vec3( 1.5f,  0.2f, -1.5f),
+            glm::vec3(-1.3f,  1.0f, -1.5f)
+    };
+
+    glEnable(GL_DEPTH_TEST);
     while(!glfwWindowShouldClose(window)){
         glfwPollEvents();
 
         glClearColor(0.2, 0.3, 0.2, 1.0);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
 
         shader.Use();
@@ -155,7 +228,7 @@ int main(void){
 
         glm::mat4 model = glm::rotate(IdentityMat4, GLfloat(glfwGetTime()*glm::radians(55.0f)), glm::vec3(0.5, 1, 0));
         glm::mat4 view = glm::translate(IdentityMat4, glm::vec3(0, 0, -3.0f));
-        glm::mat4 projection = glm::perspective(glm::radians(45.0f), float(screenWidth)/float(screenHeight), 0.1f, 100.0f);
+        glm::mat4 projection = glm::perspective(glm::radians(60.0f), float(screenWidth)/float(screenHeight), 0.1f, 100.0f);
 //        glm::mat4 trans = IdentityMat4;
 //
 //
@@ -166,11 +239,21 @@ int main(void){
         glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(model));
         GLuint location = glGetUniformLocation(shader.Program, "view");
         glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(view));
-
         location = glGetUniformLocation(shader.Program, "projection");
         glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(projection));
 
-        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+        for (int i =0; i < 10; i++) {
+            GLfloat angle = glm::radians(20.0*i);
+            if (i%3==0){
+                angle = glm::radians(glfwGetTime()*25);
+            }
+            model = glm::translate(IdentityMat4, cubePositions[i]);
+            model = glm::rotate(model, angle, glm::vec3(1, 0.5, 0.3));
+
+            GLuint loc = glGetUniformLocation(shader.Program, "model");
+            glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(model));
+            glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+        }
 
 //        trans = IdentityMat4;
 //        GLfloat scale = sin(glfwGetTime())/2+0.5;
@@ -183,6 +266,7 @@ int main(void){
         glBindVertexArray(0);
 
         glfwSwapBuffers(window);
+        usleep(1000000/60.0f);
     }
 
     glfwTerminate();
