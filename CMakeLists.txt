@@ -36,3 +36,6 @@ target_link_libraries(test-trans ${EXTRA_LIBS} ${soil_library})
 set(extra_libs ${EXTRA_LIBS} ${soil_library})
 add_executable(test-coordinate src/coordinate/test_coordinate.cpp)
 target_link_libraries(test-coordinate ${extra_libs})
+
+add_executable(test-camera src/testcamera/testcamera.cpp)
+target_link_libraries(test-camera ${extra_libs})
