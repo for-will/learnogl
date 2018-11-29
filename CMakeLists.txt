@@ -16,6 +16,9 @@ if (APPLE)
     set(EXTRA_LIBS ${COCOA_LIBRARY} ${OpenGL_LIBRARY} ${IOKit_LIBRARY} ${CoreVideo_LIBRARY})
     set(EXTRA_LIBS ${EXTRA_LIBS} /usr/local/lib/libGLEW.a /usr/local/lib/libglfw3.a)
 endif ()
+
+set(RUN_DIR ${PROJECT_SOURCE_DIR})
+
 add_executable(test main.cpp)
 
 add_executable(hellowindow src/hellowindow/hellowindow.cpp)
